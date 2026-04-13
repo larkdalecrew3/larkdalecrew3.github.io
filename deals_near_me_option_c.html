@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deals Near Me — ZIP 60084</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#1a9e5c;--green-light:#e8f7ee;--green-dark:#0d5c34;
+  --blue:#1a6fe8;--blue-light:#e8f0fd;
+  --amber:#b85c00;--amber-light:#fdf0e0;
+  --surface:#ffffff;--surface2:#f5f5f3;
+  --border:rgba(0,0,0,0.12);
+  --text:#1a1a1a;--muted:#6b6b6b;--hint:#9a9a9a;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --surface:#1c1c1e;--surface2:#2c2c2e;
+    --border:rgba(255,255,255,0.12);
+    --text:#f0f0f0;--muted:#a0a0a0;--hint:#666;
+    --green-light:#0d3320;--green-dark:#6fdba8;
+    --blue-light:#0a1e3d;--amber-light:#2e1a00;
+  }
+}
+body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);padding:1.5rem;max-width:760px;margin:0 auto;}
+
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.hdr-logo{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--text);letter-spacing:-0.5px;}
+.hdr-logo span{color:var(--green);}
+.zip-pill{display:flex;align-items:center;gap:6px;border:0.5px solid var(--border);border-radius:20px;padding:4px 4px 4px 12px;background:var(--surface2);}
+.zip-pill input{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;width:58px;border:none;background:transparent;color:var(--text);outline:none;}
+.zip-pill button{font-size:11px;padding:4px 10px;border-radius:14px;border:0.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;}
+.zip-pill button:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue);}
+
+.tabs{display:flex;gap:0;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;}
+.tab{padding:8px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.15s;}
+.tab.active{color:var(--text);border-bottom-color:var(--green);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem;}
+.stat{background:var(--surface2);border-radius:8px;padding:10px 12px;}
+.stat-label{font-size:10px;color:var(--hint);margin-bottom:3px;font-family:'DM Mono',monospace;letter-spacing:0.04em;}
+.stat-val{font-size:18px;font-weight:600;color:var(--text);}
+.stat-val.green{color:var(--green);}
+
+.ai-panel{border:0.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem;}
+.ai-panel-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface2);border-bottom:0.5px solid var(--border);}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.ai-dot.pulse{animation:pulse 1.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.ai-hdr-text{font-size:13px;font-weight:500;color:var(--text);}
+.ai-hdr-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.ai-btn{margin-left:auto;font-size:12px;padding:6px 14px;border-radius:20px;border:0.5px solid var(--blue);background:var(--blue-light);color:var(--blue);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;}
+.ai-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.ai-body{padding:16px;}
+.ai-loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;}
+.ai-loading-dots span{animation:blink 1.2s infinite;display:inline-block;}
+.ai-loading-dots span:nth-child(2){animation-delay:0.2s;}
+.ai-loading-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes blink{0%,80%,100%{opacity:0;}40%{opacity:1;}}
+.ai-idle{font-size:13px;color:var(--muted);line-height:1.6;}
+
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;align-items:center;}
+.controls input{flex:1;min-width:160px;font-size:13px;padding:7px 12px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;}
+.controls input:focus{border-color:var(--green);}
+.controls select{font-size:13px;padding:7px 10px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;cursor:pointer;}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;}
+.chip{font-size:11px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.chip.active{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
+
+.deals-list{display:flex;flex-direction:column;gap:8px;}
+.deal-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;transition:border-color 0.15s;}
+.deal-card:hover{border-color:var(--muted);}
+.deal-card.saved{border-color:var(--green);}
+.d-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0;font-family:'DM Mono',monospace;}
+.d-info{min-width:0;}
+.d-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.d-meta{font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.d-tag{font-size:10px;padding:2px 7px;border-radius:10px;}
+.d-tag-grocery{background:var(--green-light);color:var(--green-dark);}
+.d-tag-retail{background:var(--blue-light);color:var(--blue);}
+.d-tag-pharmacy{background:var(--amber-light);color:var(--amber);}
+.d-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.d-savings{font-size:16px;font-weight:600;color:var(--green);font-family:'DM Mono',monospace;}
+.d-pct{font-size:10px;color:var(--muted);}
+.d-btns{display:flex;gap:5px;}
+.d-btn{font-size:10px;padding:3px 9px;border-radius:10px;border:0.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;text-decoration:none;display:inline-block;}
+.d-btn:hover{background:var(--surface2);}
+.d-btn.saved-btn{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
+.d-btn.src{color:var(--blue);border-color:var(--blue);}
+.d-btn.src:hover{background:var(--blue-light);}
+
+.store-card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;margin-bottom:8px;}
+.s-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0;font-family:'DM Mono',monospace;}
+.s-info{min-width:0;}
+.s-name{font-size:13px;font-weight:500;color:var(--text);}
+.s-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.s-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
+.s-links{display:flex;flex-direction:column;gap:5px;align-items:flex-end;}
+.s-btn{font-size:11px;padding:5px 12px;border-radius:8px;border:0.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-decoration:none;display:inline-block;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.s-btn:hover{background:var(--surface2);}
+.s-btn.primary{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
+.s-btn.primary:hover{opacity:0.8;}
+
+.flipp-banner{background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
+.flipp-icon{width:40px;height:40px;border-radius:8px;background:#EEEDFE;color:#3C3489;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0;font-family:'DM Mono',monospace;}
+.flipp-text{flex:1;min-width:0;}
+.flipp-title{font-size:13px;font-weight:500;color:var(--text);}
+.flipp-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:13px;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-logo">deals<span>near.me</span></div>
+  <div class="zip-pill">
+    <input type="text" id="zip" value="60084" maxlength="5">
+    <button onclick="applyZip()">Update</button>
+  </div>
+  <span style="font-size:12px;color:var(--muted);" id="area-label">Wauconda, IL · 10 mi radius</span>
+</div>
+
+<div class="stat-strip">
+  <div class="stat"><div class="stat-label">Stores</div><div class="stat-val">14</div></div>
+  <div class="stat"><div class="stat-label">AI deals found</div><div class="stat-val green" id="ai-deal-count">—</div></div>
+  <div class="stat"><div class="stat-label">Saved</div><div class="stat-val" id="saved-count">0</div></div>
+  <div class="stat"><div class="stat-label">Est. savings</div><div class="stat-val green" id="total-savings">—</div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('ai',this)">AI deal list</div>
+  <div class="tab" onclick="switchTab('hub',this)">Store hub</div>
+  <div class="tab" onclick="switchTab('saved',this)">Saved deals</div>
+</div>
+
+<!-- AI TAB -->
+<div class="tab-content active" id="tab-ai">
+  <div class="ai-panel">
+    <div class="ai-panel-hdr">
+      <div class="ai-dot" id="ai-dot"></div>
+      <div>
+        <div class="ai-hdr-text">AI deal scanner</div>
+        <div class="ai-hdr-sub" id="ai-status">Pull live deals from all stores near ZIP 60084</div>
+      </div>
+      <button class="ai-btn" id="ai-btn" onclick="fetchAIDeals()">Scan deals ↗</button>
+    </div>
+    <div class="ai-body" id="ai-body">
+      <div class="ai-idle">Click <strong>Scan deals</strong> to generate a comprehensive list of current digital coupons and deals across all stores near ZIP 60084 — grocery, retail, pharmacy, and home — consolidated into one ranked list, sorted by biggest savings.</div>
+    </div>
+  </div>
+  <div id="ai-deals-section" style="display:none;">
+    <div class="controls">
+      <input type="text" id="ai-search" placeholder="Search deals or stores..." oninput="renderAIDeals()">
+      <select id="ai-sort" onchange="renderAIDeals()">
+        <option value="savings">Sort: Biggest savings</option>
+        <option value="pct">Sort: % off</option>
+        <option value="store">Sort: Store name</option>
+        <option value="exp">Sort: Expiring soon</option>
+      </select>
+    </div>
+    <div class="cat-chips" id="ai-chips"></div>
+    <div class="deals-list" id="ai-deals-list"></div>
+  </div>
+</div>
+
+<!-- HUB TAB -->
+<div class="tab-content" id="tab-hub">
+  <div class="flipp-banner">
+    <div class="flipp-icon">F</div>
+    <div class="flipp-text">
+      <div class="flipp-title">Flipp — every local weekly ad in one place</div>
+      <div class="flipp-sub">Pre-filtered to ZIP 60084 — browse all store circulars simultaneously</div>
+    </div>
+    <a class="s-btn primary" href="https://flipp.com/en-us/flyers?postal_code=60084" target="_blank">Open Flipp ↗</a>
+  </div>
+  <div id="hub-list"></div>
+</div>
+
+<!-- SAVED TAB -->
+<div class="tab-content" id="tab-saved">
+  <div class="deals-list" id="saved-list"></div>
+  <div class="empty" id="saved-empty" style="display:none;">No saved deals yet. Scan for AI deals and hit Save on any deal.</div>
+</div>
+
+<script>
+const STORES_HUB = [
+  {name:'Jewel-Osco',sub:'547 W Liberty St, Wauconda · 0.5 mi',cats:['grocery','pharmacy'],icon:'J',ib:'#EAF3DE',ic:'#27500A',links:[{label:'Weekly ad',url:'https://www.jewelosco.com/weeklyad/',p:true},{label:'Digital coupons',url:'https://www.jewelosco.com/foru/coupons-deals.html'}]},
+  {name:'Walgreens',sub:'602 W Liberty St, Wauconda · 0.8 mi',cats:['pharmacy'],icon:'W',ib:'#FAEEDA',ic:'#633806',links:[{label:'Weekly deals',url:'https://www.walgreens.com/offers/offers.jsp',p:true},{label:'Digital coupons',url:'https://www.walgreens.com/topic/promotion/coupon.jsp'}]},
+  {name:"Woodman's",sub:'1325 N Old Rand Rd, Wauconda · 1.2 mi',cats:['grocery'],icon:'W',ib:'#EAF3DE',ic:'#27500A',links:[{label:'Weekly specials',url:'https://www.woodmans.com/specials/',p:true}]},
+  {name:'Dollar General',sub:'Round Lake / Island Lake · ~4 mi',cats:['retail','grocery'],icon:'D',ib:'#E6F1FB',ic:'#0C447C',links:[{label:'Weekly ad',url:'https://www.dollargeneral.com/weekly-ad.html',p:true},{label:'Digital coupons',url:'https://www.dollargeneral.com/savings/coupons'}]},
+  {name:'ALDI',sub:'Round Lake Beach · ~4 mi',cats:['grocery'],icon:'A',ib:'#EAF3DE',ic:'#27500A',links:[{label:'Weekly specials',url:'https://www.aldi.us/en/weekly-specials/',p:true},{label:'ALDI Finds',url:'https://www.aldi.us/en/aldi-finds/'}]},
+  {name:'Target',sub:'Lake Zurich · ~5 mi',cats:['retail','grocery'],icon:'T',ib:'#E6F1FB',ic:'#0C447C',links:[{label:'Weekly ad',url:'https://www.target.com/weekly-ad',p:true},{label:'Target Circle deals',url:'https://www.target.com/c/target-circle-deals/-/N-q4wsq'}]},
+  {name:"Mariano's",sub:'Lake Zurich · ~5 mi',cats:['grocery','pharmacy'],icon:'M',ib:'#EAF3DE',ic:'#27500A',links:[{label:'Weekly ad',url:'https://www.marianos.com/weeklyad/',p:true},{label:'Digital coupons',url:'https://www.marianos.com/foru/coupons-deals.html'}]},
+  {name:'Walmart',sub:'Lake Zurich · ~5 mi',cats:['grocery','retail'],icon:'W',ib:'#EAF3DE',ic:'#27500A',links:[{label:'Rollbacks & deals',url:'https://www.walmart.com/shop/deals',p:true},{label:'Grocery deals',url:'https://www.walmart.com/browse/food'}]},
+  {name:'Menards',sub:'Round Lake Beach · ~5 mi',cats:['home'],icon:'M',ib:'#FAECE7',ic:'#712B13',links:[{label:'Weekly ad',url:'https://www.menards.com/main/weekly-ad.html',p:true}]},
+  {name:'CVS',sub:'Lake Zurich / Mundelein · ~5–6 mi',cats:['pharmacy'],icon:'C',ib:'#FAEEDA',ic:'#633806',links:[{label:'Weekly ad',url:'https://www.cvs.com/weekly-ad/weekly-ad.jsp',p:true},{label:'Digital coupons',url:'https://www.cvs.com/extracare/coupons'}]},
+  {name:"Kohl's",sub:'Mundelein / Lake Zurich · ~6 mi',cats:['retail'],icon:'K',ib:'#E6F1FB',ic:'#0C447C',links:[{label:"Today's deals",url:'https://www.kohls.com/catalog/sale-clearance.jsp',p:true},{label:"Kohl's Cash",url:'https://www.kohls.com/catalog/kohls-cash.jsp'}]},
+  {name:'Home Depot',sub:'Mundelein · ~7 mi',cats:['home'],icon:'H',ib:'#FAECE7',ic:'#712B13',links:[{label:'Deals & promotions',url:'https://www.homedepot.com/c/Savings_Center',p:true}]},
+  {name:'Meijer',sub:'Gurnee · ~10 mi',cats:['grocery','retail'],icon:'M',ib:'#EAF3DE',ic:'#27500A',links:[{label:'Weekly ad',url:'https://www.meijer.com/shopping/weekly-deals.html',p:true},{label:'mPerks coupons',url:'https://www.meijer.com/shopping/mperks.html'}]},
+];
+
+const CAT_COLORS={grocery:'d-tag-grocery',retail:'d-tag-retail',pharmacy:'d-tag-pharmacy',home:'d-tag-pharmacy'};
+const CAT_LABEL={grocery:'Grocery',retail:'Retail',pharmacy:'Pharmacy',home:'Home'};
+const ICON_MAP={
+  'Jewel-Osco':{l:'J',ib:'#EAF3DE',ic:'#27500A'},"Woodman's":{l:'W',ib:'#EAF3DE',ic:'#27500A'},
+  'ALDI':{l:'A',ib:'#EAF3DE',ic:'#27500A'},"Mariano's":{l:'M',ib:'#EAF3DE',ic:'#27500A'},
+  'Walmart':{l:'W',ib:'#EAF3DE',ic:'#27500A'},'Meijer':{l:'M',ib:'#EAF3DE',ic:'#27500A'},
+  'Target':{l:'T',ib:'#E6F1FB',ic:'#0C447C'},"Kohl's":{l:'K',ib:'#E6F1FB',ic:'#0C447C'},
+  'Dollar General':{l:'D',ib:'#E6F1FB',ic:'#0C447C'},'Walgreens':{l:'W',ib:'#FAEEDA',ic:'#633806'},
+  'CVS':{l:'C',ib:'#FAEEDA',ic:'#633806'},'Home Depot':{l:'H',ib:'#FAECE7',ic:'#712B13'},
+  'Menards':{l:'M',ib:'#FAECE7',ic:'#712B13'},
+};
+
+let aiDeals=[], savedDeals=new Set(), aiCatFilter='all';
+
+function switchTab(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='saved') renderSaved();
+}
+
+function applyZip(){
+  const z=document.getElementById('zip').value.trim();
+  document.getElementById('area-label').textContent=z+' · 10 mi radius';
+}
+
+function renderHub(){
+  document.getElementById('hub-list').innerHTML=STORES_HUB.map(s=>`
+    <div class="store-card">
+      <div class="s-icon" style="background:${s.ib};color:${s.ic};">${s.icon}</div>
+      <div class="s-info">
+        <div class="s-name">${s.name}</div>
+        <div class="s-sub">${s.sub}</div>
+        <div class="s-tags">${s.cats.map(c=>`<span class="d-tag ${CAT_COLORS[c]||'d-tag-grocery'}">${CAT_LABEL[c]||c}</span>`).join('')}</div>
+      </div>
+      <div class="s-links">${s.links.map(l=>`<a class="s-btn${l.p?' primary':''}" href="${l.url}" target="_blank">${l.label} ↗</a>`).join('')}</div>
+    </div>`).join('');
+}
+
+async function fetchAIDeals(){
+  const btn=document.getElementById('ai-btn');
+  const dot=document.getElementById('ai-dot');
+  const body=document.getElementById('ai-body');
+  const status=document.getElementById('ai-status');
+  btn.disabled=true; dot.classList.add('pulse');
+  status.textContent='Scanning deals near ZIP 60084...';
+  body.innerHTML=`<div class="ai-loading"><span>Analyzing stores</span><div class="ai-loading-dots"><span>.</span><span>.</span><span>.</span></div></div>`;
+  const zip=document.getElementById('zip').value.trim()||'60084';
+  const prompt=`You are a local deal aggregator. Generate a comprehensive, realistic list of CURRENT digital coupons and deals available near ZIP code ${zip} (Wauconda, IL area). Include deals from these local stores: Jewel-Osco, Walgreens, Woodman's, ALDI, Mariano's, Walmart, Target, CVS, Kohl's, Dollar General, Meijer, Home Depot, Menards.\n\nReturn ONLY a JSON array with NO markdown, NO backticks, NO preamble. Each object must have exactly these fields:\n{\n  "id": number,\n  "store": "store name",\n  "name": "short deal description (max 60 chars)",\n  "cat": "grocery" | "retail" | "pharmacy" | "home",\n  "savings": number (dollar amount saved, e.g. 3.99),\n  "pct": number (percent off, e.g. 25),\n  "exp": "Apr DD" (expiry date within next 2 weeks),\n  "url": "direct URL to that store's deals or coupon page"\n}\n\nGenerate 28-35 varied deals. Sort by savings descending. Be specific and realistic (e.g. "B2G1 free Kellogg's cereal", "20% off all denim", "$3 off Tide Pods 81ct"). Cover multiple categories. Include a mix of dollar-off and percent-off deals.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'anthropic-version':'2023-06-01'
+      },
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})
+    });
+    if(!res.ok){
+      const errText=await res.text();
+      throw new Error(`API error ${res.status}: ${errText}`);
+    }
+    const data=await res.json();
+    const raw=data.content.map(b=>b.text||'').join('');
+    const clean=raw.replace(/```json|```/g,'').trim();
+    const jsonMatch=clean.match(/\[[\s\S]*\]/);
+    aiDeals=JSON.parse(jsonMatch?jsonMatch[0]:clean);
+    document.getElementById('ai-deal-count').textContent=aiDeals.length;
+    document.getElementById('total-savings').textContent='$'+aiDeals.reduce((s,d)=>s+d.savings,0).toFixed(2);
+    status.textContent=`Found ${aiDeals.length} deals near ZIP ${zip} — updated ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+    dot.classList.remove('pulse'); btn.textContent='Refresh ↗'; btn.disabled=false;
+    body.innerHTML='';
+    buildAIChips();
+    document.getElementById('ai-deals-section').style.display='block';
+    renderAIDeals();
+  }catch(e){
+    body.innerHTML=`<div style="font-size:13px;color:#c0392b;">Error: `+e.message+`</div>`;
+    dot.classList.remove("pulse"); btn.disabled=false; btn.textContent="Retry u2197";
+    status.textContent="Error u2014 click Retry to try again";
+    console.error("Deal fetch error:",e);
+  }
+}
+
+function buildAIChips(){
+  const cats=['all',...new Set(aiDeals.map(d=>d.cat))];
+  const labels={all:'All deals',grocery:'Grocery',retail:'Retail',pharmacy:'Pharmacy',home:'Home'};
+  document.getElementById('ai-chips').innerHTML=cats.map(c=>
+    `<button class="chip${c==='all'?' active':''}" id="achip-${c}" onclick="setAICat('${c}')">${labels[c]||c}</button>`
+  ).join('');
+}
+
+function setAICat(cat){
+  aiCatFilter=cat;
+  document.querySelectorAll('#ai-chips .chip').forEach(c=>c.classList.remove('active'));
+  const el=document.getElementById('achip-'+cat);
+  if(el) el.classList.add('active');
+  renderAIDeals();
+}
+
+function renderAIDeals(){
+  const q=(document.getElementById('ai-search').value||'').toLowerCase();
+  const sort=document.getElementById('ai-sort').value;
+  let deals=aiDeals.filter(d=>{
+    return (aiCatFilter==='all'||d.cat===aiCatFilter)&&(!q||d.store.toLowerCase().includes(q)||d.name.toLowerCase().includes(q));
+  });
+  if(sort==='savings') deals.sort((a,b)=>b.savings-a.savings);
+  else if(sort==='pct') deals.sort((a,b)=>b.pct-a.pct);
+  else if(sort==='store') deals.sort((a,b)=>a.store.localeCompare(b.store));
+  else if(sort==='exp') deals.sort((a,b)=>new Date('2026 '+a.exp)-new Date('2026 '+b.exp));
+  if(!deals.length){document.getElementById('ai-deals-list').innerHTML='<div class="empty">No deals match.</div>';return;}
+  document.getElementById('ai-deals-list').innerHTML=deals.map(d=>{
+    const ic=ICON_MAP[d.store]||{l:d.store[0],ib:'#F1EFE8',ic:'#444441'};
+    const isSaved=savedDeals.has(d.id);
+    return `<div class="deal-card${isSaved?' saved':''}">
+      <div class="d-icon" style="background:${ic.ib};color:${ic.ic};">${ic.l}</div>
+      <div class="d-info">
+        <div class="d-name">${d.name}</div>
+        <div class="d-meta">
+          <span style="font-weight:500;color:var(--text);">${d.store}</span>
+          <span class="d-tag ${CAT_COLORS[d.cat]||'d-tag-grocery'}">${CAT_LABEL[d.cat]||d.cat}</span>
+          <span>Exp ${d.exp}</span>
+        </div>
+      </div>
+      <div class="d-right">
+        <div class="d-savings">$${d.savings.toFixed(2)}</div>
+        <div class="d-pct">${d.pct}% off</div>
+        <div class="d-btns">
+          <button class="d-btn${isSaved?' saved-btn':''}" onclick="toggleSave(${d.id})">${isSaved?'Saved':'Save'}</button>
+          <a class="d-btn src" href="${d.url}" target="_blank">View ↗</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSave(id){
+  if(savedDeals.has(id)) savedDeals.delete(id); else savedDeals.add(id);
+  document.getElementById('saved-count').textContent=savedDeals.size;
+  renderAIDeals();
+}
+
+function renderSaved(){
+  const deals=aiDeals.filter(d=>savedDeals.has(d.id));
+  const empty=document.getElementById('saved-empty');
+  const list=document.getElementById('saved-list');
+  if(!deals.length){empty.style.display='block';list.innerHTML='';return;}
+  empty.style.display='none';
+  list.innerHTML=deals.map(d=>{
+    const ic=ICON_MAP[d.store]||{l:d.store[0],ib:'#F1EFE8',ic:'#444441'};
+    return `<div class="deal-card saved">
+      <div class="d-icon" style="background:${ic.ib};color:${ic.ic};">${ic.l}</div>
+      <div class="d-info">
+        <div class="d-name">${d.name}</div>
+        <div class="d-meta"><span style="font-weight:500;color:var(--text);">${d.store}</span><span class="d-tag ${CAT_COLORS[d.cat]}">${CAT_LABEL[d.cat]}</span><span>Exp ${d.exp}</span></div>
+      </div>
+      <div class="d-right">
+        <div class="d-savings">$${d.savings.toFixed(2)}</div>
+        <div class="d-pct">${d.pct}% off</div>
+        <div class="d-btns">
+          <button class="d-btn saved-btn" onclick="toggleSave(${d.id});renderSaved();">Remove</button>
+          <a class="d-btn src" href="${d.url}" target="_blank">View ↗</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderHub();
+</script>
+</body>
+</html>
